@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "UseJsonData";
+}
+
+<h2>Use Json Data</h2>
+
+
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="margin-left:200px">Simple Pie Chart</h4>
+            <div id="chart1"></div>
+        </div>
+        <div class="col-md-6">
+            <h4 style="margin-left:200px">3D Pie Chart</h4>
+            <div id="chart2"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h4 style="margin-left:200px">Exploded Pie Chart</h4>
+            <div id="chart3"></div>
+        </div>
+        <div class="col-md-6">
+            <h4 style="margin-left:200px">Exploded 3D Pie Chart</h4>
+            <div id="chart4"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var json = {
+                cols: [
+                    { id: 'taxType', label: 'Tax Type', type: 'string' },
+                    { id: 'percent', label: 'Tax Percentage', type: 'number' }
+                ],
+                rows: [
+                    { c: [{ v: 'Soc. Sec. Tax' }, { v: 30, f: '30%' }] },
+                    { c: [{ v: 'Income Tax' }, { v: 35 }] },
+                    { c: [{ v: 'Borrowing' }, { v: 15 }] },
+                    { c: [{ v: 'Corp. Tax' }, { v: 12 }] },
+                    { c: [{ v: 'Misc' }, { v: 8 }] },
+                ],
+            };
+
+            var data = new google.visualization.DataTable(json);           
+
+            // Simple Pie Chart:
+            var option = {
+                title: 'Tax Structure in IND',
+                width: 500,
+                height: 400
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('chart1'));
+            chart.draw(data, option);
+
+            //3D Pie Chart:
+            option.is3D = true;
+            chart = new google.visualization.PieChart(document.getElementById('chart2'));
+            chart.draw(data, option);
+
+            // Exploded Pie Chart:
+            option.is3D = false;
+            option.slices = {
+                1: { offset: 0.3 },
+                3: { offset: 0.5 }
+            };
+            chart = new google.visualization.PieChart(document.getElementById('chart3'));
+            chart.draw(data, option);
+
+            // Exploded 3D Pie Chart:
+            option.is3D = true;
+            chart = new google.visualization.PieChart(document.getElementById('chart4'));
+            chart.draw(data, option);
+        }
+    </script>
+}
+

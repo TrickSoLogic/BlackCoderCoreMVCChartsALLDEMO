@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "UseDataFromServer";
+}
+
+<h2>Use Data From Server</h2>
+<hr />
+
+<div class="container">
+    <div id="chart1"></div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {           
+            $.get('JsonData', function (jsonData) {
+                data = google.visualization.arrayToDataTable(jsonData, false);
+                var option = {
+                    title: "Line Chart",
+                    width: 800,
+                    height: 600
+                };
+                chart = new google.visualization.LineChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+
+            })
+            
+        }
+    </script>
+}
